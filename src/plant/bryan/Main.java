@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -25,15 +26,18 @@ public class Main extends Application{
 		Group root = new Group();
 		Canvas canvas = new Canvas(1280,720);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		
+		Creature c = new Creature();
 
+		Circle circle = new Circle(200,200,25);
 		gc.setFill(Color.GREEN);
 		gc.setStroke(Color.BLUE);
-		gc.strokeRect(50, 50, 100, 100);
-		gc.fillOval(200, 200, 50, 50);
 
 		root.getChildren().add(canvas);
-		Scene scene = new Scene(root);
-		scene.setFill(Color.PINK);
+		c.draw(root);
+		c.hide(root);
+		
+		Scene scene = new Scene(root, Color.GRAY);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
