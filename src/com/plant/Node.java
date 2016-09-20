@@ -1,4 +1,4 @@
-package plant.bryan;
+package com.plant;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;

@@ -1,4 +1,4 @@
-package plant.bryan;
+package com.plant;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,16 +17,20 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application{
 	public static void main(String[] args){
+		
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		long last_time = System.nanoTime();
+		boolean running = true;
+
 		primaryStage.setTitle("Evolution Simulator");
 		Group root = new Group();
 		Canvas canvas = new Canvas(1280,720);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		
+
 		Creature c = new Creature();
 
 		Circle circle = new Circle(200,200,25);
@@ -35,9 +39,9 @@ public class Main extends Application{
 
 		root.getChildren().add(canvas);
 		c.draw(root);
-		c.hide(root);
-		
+
 		Scene scene = new Scene(root, Color.GRAY);
+   
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
