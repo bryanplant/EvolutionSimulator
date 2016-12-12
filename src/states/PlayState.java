@@ -1,5 +1,9 @@
 package states;
 
+import com.plant.Creature;
+
+import javafx.scene.Group;
+
 public class PlayState extends State {
     //private Player player;
    // private Map map;
@@ -19,14 +23,13 @@ public class PlayState extends State {
     }
 
     @Override
-    protected void update(float dt) {
-        //player.update(dt, camera, map);
-        //camera.update();
+    protected void update(double dt, Creature c) {
+       c.update(dt);
     }
 
     @Override
-    protected void render() {
-
+    protected void render(Group root, Creature c) {
+    	c.draw(root);
     }
 
     @Override

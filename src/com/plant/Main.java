@@ -15,6 +15,8 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import states.GameStateManager;
+import states.PlayState;
 
 public class Main extends Application{
 	private Group root;
@@ -23,6 +25,9 @@ public class Main extends Application{
 	private Scene scene;
 	private Creature c;
 	private long start;
+	long lastTime = 0;
+	
+	private GameStateManager gsm;
 
 	public static void main(String[] args){
 
@@ -48,13 +53,22 @@ public class Main extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		start = System.nanoTime();
+		
+		gsm = new GameStateManager();
+		gsm.push(new PlayState(gsm));
 
 		AnimationTimer timer = new AnimationTimer(){
 
 			@Override
-			public void handle(long arg0) {
-				c.update(arg0);
-				c.draw(root);
+			public void handle(long time) {
+				if(lastTime == 0)
+					lastTime = time;
+				double dt = (time-lastTime)/1000000000.0;
+				gsm.update(dt, c);
+				gsm.render(root, c);
+				System.out.println(dt);
+				
+				lastTime = time;
 			}
 
 		};

@@ -2,8 +2,13 @@ package states;
 
 import java.util.Stack;
 
+import com.plant.Creature;
+
+import javafx.scene.Group;
+
 public class GameStateManager {
-    private Stack<State> states;
+    private static final Group Group = null;
+	private Stack<State> states;
 
     public GameStateManager(){
         states = new Stack<State>();
@@ -20,12 +25,12 @@ public class GameStateManager {
         states.push(state);
     }
 
-    public void update(float dt){
-        states.peek().update(dt);
+    public void update(double dt, Creature c){
+        states.peek().update(dt, c);
     }
 
-    public void render(){
-        states.peek().render();
+    public void render(Group root, Creature c){
+        states.peek().render(root, c);
     }
 
     public void resize(int width, int height) {

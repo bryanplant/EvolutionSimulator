@@ -9,8 +9,10 @@ public class Node {
 	private Circle c;
 	private double speedX;
 	private double speedY;
-	private double gravity = 10;
+	private double gravity = 5;
 	private long lastTime;
+	private long dt;
+
 	public Node(double x, double y){
 		c = new Circle(x, y, 12.5);
 		c.setFill(Color.ALICEBLUE);
@@ -18,23 +20,13 @@ public class Node {
 		speedY = 0;
 	}
 
-	public void move(long time){
-		if(lastTime == 0)
-			lastTime = time;
-		speedY+=gravity*((time - lastTime)/1000000000.0);
+	public void update(double dt){
+		speedY+=gravity*dt;
 		setY(getY()+speedY);
-		
-		if(getY() >= 720 && getY() <= 730){
-			System.out.println(speedY);
-			System.out.println(getY());
-			System.out.println((time - lastTime)/100000000000.0);
-			setY(720);
-		}
-		lastTime = time;
 	}
 
-	public void draw(Group root){
-			root.getChildren().add(c);
+	public void render(Group root){
+		root.getChildren().add(c);
 	}
 
 	public void hide(Group root){
