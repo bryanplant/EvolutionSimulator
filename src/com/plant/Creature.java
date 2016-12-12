@@ -1,25 +1,39 @@
 package com.plant;
 
+import java.util.ArrayList;
+
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Creature {
-	private Node n1;
-	private Node n2;
+	private ArrayList<Node> nodes;
 	
-	public Creature()
-	{
-		n1 = new Node(100, 100);
-		n2 = new Node(150, 250);
+	public Creature(){
+		nodes = new ArrayList<Node>();
+		nodes.add(new Node(50, 20));
+	}
+	
+	public void update(long time){	
+		for(Node temp: nodes){
+			temp.move(time);
+		}
+	}
+	
+	public void addNode(Node node){
+		nodes.add(node);
 	}
 	
 	public void draw(Group root){
-		n1.draw(root);
-		n2.draw(root);
+		if(!root.getChildren().contains(nodes.get(0).getCircle())){
+			for(Node temp: nodes){
+				temp.draw(root);
+			}
+		}
 	}
 	
 	public void hide(Group root){
-		n1.hide(root);
-		n2.hide(root);
+		for(Node temp: nodes){
+			temp.hide(root);
+		}
 	}
 }

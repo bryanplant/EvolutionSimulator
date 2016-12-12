@@ -1,5 +1,6 @@
 package com.plant;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,33 +17,47 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Main extends Application{
+	private Group root;
+	private Canvas canvas;
+	private GraphicsContext gc;
+	private Scene scene;
+	private Creature c;
+	private long start;
+
 	public static void main(String[] args){
-		
+
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-		long last_time = System.nanoTime();
-		boolean running = true;
-
-		primaryStage.setTitle("Evolution Simulator");
-		Group root = new Group();
-		Canvas canvas = new Canvas(1280,720);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-
-		Creature c = new Creature();
-
-		Circle circle = new Circle(200,200,25);
-		gc.setFill(Color.GREEN);
-		gc.setStroke(Color.BLUE);
+	public void init(){
+		root = new Group();
+		canvas = new Canvas(1280,720);
+		gc = canvas.getGraphicsContext2D();
 
 		root.getChildren().add(canvas);
-		c.draw(root);
 
-		Scene scene = new Scene(root, Color.GRAY);
-   
+		scene = new Scene(root, Color.GRAY);
+
+		c = new Creature();
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Evolution Simulator");
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		start = System.nanoTime();
+
+		AnimationTimer timer = new AnimationTimer(){
+
+			@Override
+			public void handle(long arg0) {
+				c.update(arg0);
+				c.draw(root);
+			}
+
+		};
+		timer.start();
 	}
 }
