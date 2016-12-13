@@ -17,8 +17,8 @@ public abstract class State {
     }
 
     protected abstract void handleInput();
-    protected abstract void update(double dt, Creature c);
-    protected abstract void render(Group root, Creature c);
+    protected abstract void update(double dt);
+    protected abstract void render();
     protected abstract void dispose();
     protected abstract void resize(int width, int height);
 }

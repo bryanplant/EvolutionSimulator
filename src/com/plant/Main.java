@@ -19,14 +19,9 @@ import states.GameStateManager;
 import states.PlayState;
 
 public class Main extends Application{
-	private Group root;
-	private Canvas canvas;
-	private GraphicsContext gc;
-	private Scene scene;
-	private Creature c;
 	private long start;
 	long lastTime = 0;
-	
+
 	private GameStateManager gsm;
 
 	public static void main(String[] args){
@@ -36,26 +31,16 @@ public class Main extends Application{
 
 	@Override
 	public void init(){
-		root = new Group();
-		canvas = new Canvas(1280,720);
-		gc = canvas.getGraphicsContext2D();
 
-		root.getChildren().add(canvas);
-
-		scene = new Scene(root, Color.GRAY);
-
-		c = new Creature();
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Evolution Simulator");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+
 		start = System.nanoTime();
-		
+
 		gsm = new GameStateManager();
-		gsm.push(new PlayState(gsm));
+		gsm.push(new PlayState(gsm, primaryStage));
 
 		AnimationTimer timer = new AnimationTimer(){
 
@@ -64,10 +49,9 @@ public class Main extends Application{
 				if(lastTime == 0)
 					lastTime = time;
 				double dt = (time-lastTime)/1000000000.0;
-				gsm.update(dt, c);
-				gsm.render(root, c);
-				System.out.println(dt);
-				
+				gsm.update(dt);
+				gsm.render();
+
 				lastTime = time;
 			}
 

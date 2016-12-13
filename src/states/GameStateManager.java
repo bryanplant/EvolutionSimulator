@@ -25,12 +25,12 @@ public class GameStateManager {
         states.push(state);
     }
 
-    public void update(double dt, Creature c){
-        states.peek().update(dt, c);
+    public void update(double dt){
+        states.peek().update(dt);
     }
 
-    public void render(Group root, Creature c){
-        states.peek().render(root, c);
+    public void render(){
+        states.peek().render();
     }
 
     public void resize(int width, int height) {
