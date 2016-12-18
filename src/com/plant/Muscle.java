@@ -46,7 +46,7 @@ public class Muscle {
 		updateLine();
 	}
 
-	public void render(Group root){
+	public void show(Group root){
 		root.getChildren().add(m);
 	}
 

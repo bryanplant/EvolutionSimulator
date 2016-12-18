@@ -30,7 +30,7 @@ public class Node {
 
 	}
 
-	public void render(Group root){
+	public void show(Group root){
 		root.getChildren().add(c);
 	}
 

@@ -31,26 +31,26 @@ public class Creature {
 	public void addNode(Node node){
 		nodes.add(node);
 	}
-	
+
 	public void addMuscle(Muscle muscle){
 		muscles.add(muscle);
 	}
-	
+
 	public Node getNode(int index){
 		return nodes.get(index);
 	}
-
-	public void draw(Group root){
-		if(!root.getChildren().contains(nodes.get(0).getCircle())){
-			for(Node temp: nodes){
-				temp.render(root);
-			}
+	
+	public ArrayList<Node> getNodes(){
+		return nodes;
+	}
+	
+	public void show(Group root){
+		for(Node temp: nodes){
+			temp.show(root);
 		}
 
-		if(!root.getChildren().contains(muscles.get(0).getLine())){
-			for(Muscle temp: muscles){
-				temp.render(root);
-			}
+		for(Muscle temp: muscles){
+			temp.show(root);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class Creature {
 			temp.hide(root);
 		}
 	}
-	
+
 	public void setSimulationSpeed(int speed){
 		for(Muscle i : muscles){
 			i.setSimulationSpeed(speed);
