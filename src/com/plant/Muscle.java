@@ -35,9 +35,9 @@ public class Muscle {
 		maxLength = length*1.5;
 		minLength = length/2.5;
 
-		speed = rand.nextInt(20) + 50;
-		contractTime = rand.nextDouble() + 2;
-		expandTime = rand.nextDouble() + 2;
+		speed = rand.nextInt(150) + 50;
+		contractTime = rand.nextDouble() + .75;
+		expandTime = rand.nextDouble() + .75;
 		waitTime = rand.nextDouble() + .5;
 	}
 

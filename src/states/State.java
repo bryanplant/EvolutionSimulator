@@ -13,7 +13,6 @@ public abstract class State {
     protected State(GameStateManager gsm)
     {
         this.gsm = gsm;
-        camera = new ParallelCamera();
     }
 
     protected abstract void handleInput();

@@ -19,7 +19,6 @@ import states.GameStateManager;
 import states.PlayState;
 
 public class Main extends Application{
-	private long start;
 	long lastTime = 0;
 
 	private GameStateManager gsm;
@@ -36,9 +35,6 @@ public class Main extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-		start = System.nanoTime();
-
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm, primaryStage));
 

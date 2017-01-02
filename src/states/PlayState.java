@@ -7,6 +7,7 @@ import com.plant.Creature;
 import com.plant.Environment;
 import com.plant.Muscle;
 import com.plant.Node;
+import com.plant.UserInterface;
 
 import javafx.scene.Camera;
 import javafx.scene.Group;
@@ -16,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PlayState extends State {
@@ -27,40 +29,45 @@ public class PlayState extends State {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	private PerspectiveCamera camera;
-	
+
 	private Environment environment;
-	
+	private UserInterface ui;
+
 	private int gameWidth = 1280;
 	private int gameHeight = 720;
+	private int simSpeed;
 
     public PlayState(GameStateManager gsm, Stage primaryStage)
     {
         super(gsm);
 
-        cameraGroup = new Group();
 		root = new Group();
 		canvas = new Canvas(gameWidth,gameHeight);
 		gc = canvas.getGraphicsContext2D();
 		camera = new PerspectiveCamera();
-		
-		cameraGroup.getChildren().add(camera);
 
 		root.getChildren().add(canvas);
-		root.getChildren().add(cameraGroup);
-		
+		root.getChildren().add(camera);
+
 		scene = new Scene(root, gameWidth, gameHeight, Color.GRAY);
 		scene.setCamera(camera);
 
 		creature = new Creature();
+
 		environment = new Environment(gameHeight);
 		environment.show(root);
+
+		ui = new UserInterface();
+		ui.show(root);
 
 		primaryStage.setTitle("Evolution Simulator");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
+		simSpeed = 10;
+
 		createCreature();
-		setSimulationSpeed(20);
+		setSimulationSpeed(simSpeed);
     }
 
     @Override
@@ -70,31 +77,29 @@ public class PlayState extends State {
 
     @Override
     protected void update(double dt) {
-    	updateCamera();
+    	updateCamera(simSpeed/5);
     	creature.update(dt);
+    	ui.update(camera);
     }
 
     @Override
     protected void render() {
-    	//creature.render(root);
-    	//environment.render(root);
+
     }
 
     @Override
     protected void dispose() {
-        //player.dispose();
-        //map.dispose();
     }
 
     @Override
     protected void resize(int width, int height) {
-        //viewport.update(width, height);
+        camera.resize(width, height);
     }
 
     private void createCreature(){
     	Random rand = new Random();
-    	int numNodes = 10;
-    	int numMuscles = 4;
+    	int numNodes = 4;
+    	int numMuscles = 2;
     	int newMuscles;
 
     	for(int i = 0; i < numNodes; i ++){
@@ -126,14 +131,14 @@ public class PlayState extends State {
     private void setSimulationSpeed(int speed){
     	creature.setSimulationSpeed(speed);
     }
-    
-    private void updateCamera(){
+
+    private void updateCamera(int speed){
     	int numNodes = 0;
     	double xTotal = 0;
     	double yTotal = 0;
-    	
-    	double translateSpeed = 1;
-    	
+
+    	double translateSpeed = speed;
+
     	for(Node temp : creature.getNodes()){
     		xTotal += temp.getX();
     		yTotal += temp.getY();
@@ -141,13 +146,17 @@ public class PlayState extends State {
     	}
     	double camTargetX = xTotal/numNodes - gameWidth/2;
     	double camTargetY = yTotal/numNodes - gameHeight/2;
-    	
+    	if(camTargetX < 0)
+    		camTargetX = 0;
+    	if(camTargetY < 0)
+    		camTargetY = 0;
+
     	if(Math.abs(camera.getTranslateX() - camTargetX) > 10){
     		if(camera.getTranslateX() - camTargetX < 0)
     			camera.setTranslateX(camera.getTranslateX() + translateSpeed);
     		else
     			camera.setTranslateX(camera.getTranslateX() - translateSpeed);
-    			
+
     	}
     	if(Math.abs(camera.getTranslateY() - camTargetY) > 10){
     		if(camera.getTranslateY() - camTargetY < 0)
