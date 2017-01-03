@@ -1,34 +1,28 @@
 package states;
 
-import java.awt.Graphics2D;
-import java.util.Random;
-
 import com.plant.Creature;
 import com.plant.Environment;
-import com.plant.Muscle;
-import com.plant.Node;
 import com.plant.UserInterface;
 
-import javafx.scene.Camera;
-import javafx.scene.Group;
 import javafx.scene.ParallelCamera;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import javafx.scene.SubScene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class PlayState extends State {
 
 	private Scene scene;
 	private Creature creature;
-	private Group root;
-	private Group cameraGroup;
-	private Canvas canvas;
-	private GraphicsContext gc;
-	private PerspectiveCamera camera;
+	private Pane root;
+	private BorderPane pane;
+	private HBox uiBox;
+	private SubScene subScene;
+
+	private ParallelCamera camera;
 
 	private Environment environment;
 	private UserInterface ui;
@@ -41,33 +35,33 @@ public class PlayState extends State {
     {
         super(gsm);
 
-		root = new Group();
-		canvas = new Canvas(gameWidth,gameHeight);
-		gc = canvas.getGraphicsContext2D();
-		camera = new PerspectiveCamera();
+        camera = new ParallelCamera();
+        root = new Pane(camera);
 
-		root.getChildren().add(canvas);
-		root.getChildren().add(camera);
+        environment = new Environment(gameHeight);
+        environment.show(root);
+        creature = new Creature(4, 2);
+        creature.show(root);
 
-		scene = new Scene(root, gameWidth, gameHeight, Color.GRAY);
-		scene.setCamera(camera);
+        subScene = new SubScene(root, gameWidth, gameHeight);
+        subScene.setCamera(camera);
 
-		creature = new Creature();
+	    pane = new BorderPane();
+	    pane.setCenter(subScene);
 
-		environment = new Environment(gameHeight);
-		environment.show(root);
+	    uiBox = new HBox();
+	    ui = new UserInterface();
+	    ui.show(uiBox);
 
-		ui = new UserInterface();
-		ui.show(root);
+	    pane.setTop(uiBox);
 
-		primaryStage.setTitle("Evolution Simulator");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+	    scene = new Scene(pane);
 
-		simSpeed = 10;
+	    primaryStage.setScene(scene);
+	    primaryStage.setTitle("Evolution Simulator");
+	    primaryStage.show();
 
-		createCreature();
-		setSimulationSpeed(simSpeed);
+	    simSpeed = 20;
     }
 
     @Override
@@ -77,9 +71,9 @@ public class PlayState extends State {
 
     @Override
     protected void update(double dt) {
-    	updateCamera(simSpeed/5);
+    	dt*=simSpeed;
+    	updateCamera(2);
     	creature.update(dt);
-    	ui.update(camera);
     }
 
     @Override
@@ -96,74 +90,8 @@ public class PlayState extends State {
         camera.resize(width, height);
     }
 
-    private void createCreature(){
-    	Random rand = new Random();
-    	int numNodes = 4;
-    	int numMuscles = 2;
-    	int newMuscles;
-
-    	for(int i = 0; i < numNodes; i ++){
-    		creature.addNode(new Node(rand.nextInt(200) + 500, rand.nextInt(200) + 300));
-    	}
-
-		for(int i = 0; i < numNodes; i++){
-			if(creature.getNode(i).getNumConnections() >= numMuscles)
-				newMuscles = 0;
-			else
-				newMuscles = numMuscles;
-				//newMuscles = numMuscles - c.getNode(i).getNumConnections();
-			for(int j = 0; j < newMuscles; j++){
-				int nextNode = rand.nextInt(numNodes);
-				while(creature.getNode(i).hasConnection(nextNode) || nextNode == i){
-					nextNode = rand.nextInt(numNodes);
-				}
-
-				creature.addMuscle(new Muscle(creature.getNode(i), creature.getNode(nextNode)));
-				creature.getNode(i).addConnection(nextNode);
-				creature.getNode(nextNode).addConnection(i);
-				System.out.println(nextNode);
-			}
-			System.out.println();
-		}
-		creature.show(root);
-    }
-
-    private void setSimulationSpeed(int speed){
-    	creature.setSimulationSpeed(speed);
-    }
-
     private void updateCamera(int speed){
-    	int numNodes = 0;
-    	double xTotal = 0;
-    	double yTotal = 0;
-
-    	double translateSpeed = speed;
-
-    	for(Node temp : creature.getNodes()){
-    		xTotal += temp.getX();
-    		yTotal += temp.getY();
-    		numNodes++;
-    	}
-    	double camTargetX = xTotal/numNodes - gameWidth/2;
-    	double camTargetY = yTotal/numNodes - gameHeight/2;
-    	if(camTargetX < 0)
-    		camTargetX = 0;
-    	if(camTargetY < 0)
-    		camTargetY = 0;
-
-    	if(Math.abs(camera.getTranslateX() - camTargetX) > 10){
-    		if(camera.getTranslateX() - camTargetX < 0)
-    			camera.setTranslateX(camera.getTranslateX() + translateSpeed);
-    		else
-    			camera.setTranslateX(camera.getTranslateX() - translateSpeed);
-
-    	}
-    	if(Math.abs(camera.getTranslateY() - camTargetY) > 10){
-    		if(camera.getTranslateY() - camTargetY < 0)
-    			camera.setTranslateY(camera.getTranslateY() + translateSpeed);
-    		else
-    			camera.setTranslateY(camera.getTranslateY() - translateSpeed);
-    	}
+    	camera.getTransforms().add(new Translate(-3, 0));
     }
 
 }

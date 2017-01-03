@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -30,11 +30,11 @@ public class Node {
 
 	}
 
-	public void show(Group root){
+	public void show(Pane root){
 		root.getChildren().add(c);
 	}
 
-	public void hide(Group root){
+	public void hide(Pane root){
 		root.getChildren().remove(c);
 	}
 
@@ -73,10 +73,9 @@ public class Node {
 	}
 
 	public boolean hasConnection(int index){
-		//System.out.println(Collections.binarySearch(connections, index));
 		return (Collections.binarySearch(connections, index) >= 0);
 	}
-	
+
 	public int getNumConnections(){
 		return numConnections;
 	}

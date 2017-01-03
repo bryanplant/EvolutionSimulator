@@ -2,7 +2,7 @@ package com.plant;
 
 import java.util.Random;
 
-import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 public class Muscle {
@@ -17,18 +17,18 @@ public class Muscle {
 	private double time;
 	private short state;
 	private short nextState;
-	
+
 	private double maxLength;
 	private double minLength;
-	
+
 	Random rand = new Random();
 
 	public Muscle(Node n1, Node n2){
 		this.n1 = n1;
 		this.n2 = n2;
-		
+
 		m = new Line(n1.getX(), n1.getY(), n2.getX(), n2.getY());
-		
+
 		double x = n1.getX() - n2.getX();
 		double y = n1.getY() - n2.getY();
 		double length = Math.sqrt(x*x + y*y);
@@ -46,8 +46,12 @@ public class Muscle {
 		updateLine();
 	}
 
-	public void show(Group root){
+	public void show(Pane root){
 		root.getChildren().add(m);
+	}
+
+	public void hide(Pane root){
+		root.getChildren().remove(m);
 	}
 
 	public Line getLine(){
@@ -76,7 +80,7 @@ public class Muscle {
 				time = 0;
 			}
 		}
-		
+
 		double distanceX = n1.getX() - n2.getX();
 		double distanceY = n1.getY() - n2.getY();
 		double magnitude = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
@@ -102,12 +106,5 @@ public class Muscle {
 		m.setStartY(n1.getY());
 		m.setEndX(n2.getX());
 		m.setEndY(n2.getY());
-	}
-	
-	public void setSimulationSpeed(int speed){
-		this.speed*=speed;
-		contractTime/=speed;
-		expandTime/=speed;
-		waitTime/=speed;
 	}
 }

@@ -2,12 +2,7 @@ package states;
 
 import java.util.Stack;
 
-import com.plant.Creature;
-
-import javafx.scene.Group;
-
 public class GameStateManager {
-    private static final Group Group = null;
 	private Stack<State> states;
 
     public GameStateManager(){

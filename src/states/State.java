@@ -1,13 +1,7 @@
 package states;
 
-import com.plant.Creature;
-
-import javafx.scene.Camera;
-import javafx.scene.Group;
-import javafx.scene.ParallelCamera;
 
 public abstract class State {
-    protected ParallelCamera camera;
     protected GameStateManager gsm;
 
     protected State(GameStateManager gsm)
