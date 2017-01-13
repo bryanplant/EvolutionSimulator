@@ -7,12 +7,12 @@ import states.GameStateManager;
 import states.PlayState;
 
 public class Main extends Application{
-	long lastTime = 0;
+	private long lastTime = 0;
 
 	private GameStateManager gsm;
 
 	public static void main(String[] args){
-
+		
 		launch(args);
 	}
 
@@ -26,20 +26,20 @@ public class Main extends Application{
 		gsm = new GameStateManager();
 		gsm.push(new PlayState(gsm, primaryStage));
 
-		AnimationTimer timer = new AnimationTimer(){
+		new AnimationTimer(){
 
 			@Override
 			public void handle(long time) {
 				if(lastTime == 0)
 					lastTime = time;
-				double dt = (time-lastTime)/1000000000.0;
-				gsm.update(dt);
-				gsm.render();
-
+				else{
+					double dt = (time-lastTime)/1000000000.0;
+					gsm.update(dt);
+					gsm.render();
+				}
 				lastTime = time;
 			}
 
-		};
-		timer.start();
+		}.start();
 	}
 }

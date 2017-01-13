@@ -10,27 +10,34 @@ public class Creature {
 	private ArrayList<Muscle> muscles;
 	private int numNodes;
 	private int numMuscles;
+	
+	private ArrayList<Integer> startPosX;
+	private ArrayList<Integer> startPosY;
 
 	Random rand = new Random();
 
-	public Creature(int numNodes, int numMuscles){
+	public Creature(int numNodes, int numMuscles, double x, double y){
 		nodes = new ArrayList<Node>();
 		muscles = new ArrayList<Muscle>();
 		this.numNodes = numNodes;
 		this.numMuscles = numMuscles;
+		
+		startPosX = new ArrayList<Integer>();
+		startPosY = new ArrayList<Integer>();
 
     	Random rand = new Random();
     	int newMuscles;
 
     	for(int i = 0; i < numNodes; i ++){
-    		addNode(new Node(rand.nextInt(200) + 500, rand.nextInt(200) + 300));
+    		int startX = rand.nextInt(200);
+    		int startY = rand.nextInt(200);
+    		nodes.add(new Node(startX, startY));
+    		startPosX.add(startX);
+    		startPosY.add(startY);
     	}
 
 		for(int i = 0; i < numNodes; i++){
-			if(nodes.get(i).getNumConnections() >= numMuscles)
-				newMuscles = 0;
-			else
-				newMuscles = numMuscles;
+			newMuscles = numMuscles - nodes.get(i).getNumConnections();
 
 			for(int j = 0; j < newMuscles; j++){
 				int nextNode = rand.nextInt(numNodes);
@@ -43,15 +50,40 @@ public class Creature {
 				nodes.get(nextNode).addConnection(i);
 			}
 		}
+		center(x, y);
+		
+		for(Muscle temp: muscles){
+			temp.update(0);
+		}
 	}
 
 	public void update(double dt){
-		for(Node temp: nodes){
-			temp.update(dt);
-		}
 		for(Muscle temp: muscles){
 			temp.update(dt);
 		}
+	}
+	
+	public void center(double x, double y){
+		double diffX = x - getAverageX();
+		double diffY = y - getAverageY();
+		
+		for(Node temp : nodes){
+			temp.setX(temp.getX() + diffX);
+			temp.setY(temp.getY() + diffY);
+		}
+	}
+	
+	public void reset(double x, double y){
+		for(int i = 0; i < nodes.size(); i++){
+			nodes.get(i).setX(startPosX.get(i));
+			nodes.get(i).setY(startPosY.get(i));
+		}
+		center(x, y);
+		
+		for(Muscle temp : muscles){
+			temp.reset();
+		}
+		update(0);
 	}
 
 	public void addNode(Node node){
@@ -72,6 +104,22 @@ public class Creature {
 
 	public int getNumMuscles(){
 		return numMuscles;
+	}
+	
+	public double getAverageX(){
+		double totalX = 0;
+		for(Node temp : nodes){
+			totalX+=temp.getX();
+		}
+		return(totalX/numNodes);
+	}
+	
+	public double getAverageY(){
+		double totalY = 0;
+		for(Node temp : nodes){
+			totalY+=temp.getY();
+		}
+		return(totalY/numNodes);
 	}
 
 	public ArrayList<Node> getNodes(){

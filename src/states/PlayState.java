@@ -10,7 +10,6 @@ import javafx.scene.SubScene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 
 public class PlayState extends State {
@@ -29,7 +28,15 @@ public class PlayState extends State {
 
 	private int gameWidth = 1280;
 	private int gameHeight = 720;
-	private int simSpeed;
+	private int simSpeed = 1;
+	private double cameraSpeed = 20;
+
+	private double lastTime = 0;
+	private double totalTime = 0;
+	
+	private int step = 0;
+	
+	private boolean firstUpdate = true;
 
     public PlayState(GameStateManager gsm, Stage primaryStage)
     {
@@ -40,17 +47,19 @@ public class PlayState extends State {
 
         environment = new Environment(gameHeight);
         environment.show(root);
-        creature = new Creature(4, 2);
+        creature = new Creature(5, 2, gameWidth/2, gameHeight/2);
         creature.show(root);
 
         subScene = new SubScene(root, gameWidth, gameHeight);
         subScene.setCamera(camera);
 
 	    pane = new BorderPane();
+	    pane.setStyle("-fx-background-color: #336699;");
 	    pane.setCenter(subScene);
 
 	    uiBox = new HBox();
-	    ui = new UserInterface();
+
+	    ui = new UserInterface(this);
 	    ui.show(uiBox);
 
 	    pane.setTop(uiBox);
@@ -60,8 +69,6 @@ public class PlayState extends State {
 	    primaryStage.setScene(scene);
 	    primaryStage.setTitle("Evolution Simulator");
 	    primaryStage.show();
-
-	    simSpeed = 20;
     }
 
     @Override
@@ -71,10 +78,33 @@ public class PlayState extends State {
 
     @Override
     protected void update(double dt) {
-    	dt*=simSpeed;
-    	updateCamera(2);
-    	creature.update(dt);
-    }
+	    	dt*=simSpeed;
+	    	totalTime+=dt;
+	    	
+    	if(totalTime < 1){
+    		firstUpdate = true;
+    	}
+    	else{
+    		if(firstUpdate){
+    			dt = totalTime - 1;
+    		}
+	    	if(totalTime > 10){
+	    		dt = 10 - lastTime;
+	    		System.out.println(lastTime);
+	    	}
+	    	
+	    	creature.update(dt);
+	    	updateCamera(dt);
+	
+	    	if(totalTime >= 10){
+	    		System.out.println(creature.getAverageX() + ", " + creature.getAverageY());
+	    		creature.reset(gameWidth/2, gameHeight/2);
+	    		totalTime = 0;
+	    	}
+	    	lastTime = totalTime;
+	    	firstUpdate = false;
+    	}
+	} 
 
     @Override
     protected void render() {
@@ -90,8 +120,22 @@ public class PlayState extends State {
         camera.resize(width, height);
     }
 
-    private void updateCamera(int speed){
-    	camera.getTransforms().add(new Translate(-3, 0));
+    private void updateCamera(double dt){
+    	if(Math.abs(camera.getTranslateX() + gameWidth/2 - creature.getAverageX()) > 50){
+	    	if(camera.getTranslateX() + gameWidth/2 < creature.getAverageX())
+	    		camera.setTranslateX(camera.getTranslateX() + cameraSpeed*dt);
+	    	else if(camera.getTranslateX() + gameWidth/2 > creature.getAverageX())
+	    		camera.setTranslateX(camera.getTranslateX() - cameraSpeed*dt);
+    	}
+    	if(Math.abs(camera.getTranslateY() + gameHeight/2 - creature.getAverageY()) > 50){
+	    	if(camera.getTranslateY() + gameHeight/2 < creature.getAverageY())
+	    		camera.setTranslateY(camera.getTranslateY() + cameraSpeed*dt);
+	    	else if(camera.getTranslateY() + gameHeight/2 > creature.getAverageY())
+	    		camera.setTranslateY(camera.getTranslateY() - cameraSpeed*dt);
+    	}
     }
 
+    public void setSimSpeed(int speed){
+    	simSpeed = speed;
+    }
 }

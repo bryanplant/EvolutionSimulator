@@ -25,11 +25,6 @@ public class Node {
 
 		friction = rand.nextDouble()/2;
 	}
-
-	public void update(double dt){
-
-	}
-
 	public void show(Pane root){
 		root.getChildren().add(c);
 	}
@@ -56,6 +51,10 @@ public class Node {
 
 	public void setY(double y){
 		c.setCenterY(y);
+	}
+	
+	public void setFriction(double friction){
+		this.friction = friction;
 	}
 
 	public void translateX(double x){
