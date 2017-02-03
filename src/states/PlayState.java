@@ -33,9 +33,7 @@ public class PlayState extends State {
 
 	private double lastTime = 0;
 	private double totalTime = 0;
-	
-	private int step = 0;
-	
+
 	private boolean firstUpdate = true;
 
     public PlayState(GameStateManager gsm, Stage primaryStage)
@@ -80,7 +78,7 @@ public class PlayState extends State {
     protected void update(double dt) {
 	    	dt*=simSpeed;
 	    	totalTime+=dt;
-	    	
+
     	if(totalTime < 1){
     		firstUpdate = true;
     	}
@@ -92,10 +90,10 @@ public class PlayState extends State {
 	    		dt = 10 - lastTime;
 	    		System.out.println(lastTime);
 	    	}
-	    	
+
 	    	creature.update(dt);
 	    	updateCamera(dt);
-	
+
 	    	if(totalTime >= 10){
 	    		System.out.println(creature.getAverageX() + ", " + creature.getAverageY());
 	    		creature.reset(gameWidth/2, gameHeight/2);
@@ -104,7 +102,7 @@ public class PlayState extends State {
 	    	lastTime = totalTime;
 	    	firstUpdate = false;
     	}
-	} 
+	}
 
     @Override
     protected void render() {
