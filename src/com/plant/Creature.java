@@ -10,7 +10,7 @@ public class Creature {
 	private ArrayList<Muscle> muscles;
 	private int numNodes;
 	private int numMuscles;
-	
+
 	private ArrayList<Integer> startPosX;
 	private ArrayList<Integer> startPosY;
 
@@ -21,7 +21,7 @@ public class Creature {
 		muscles = new ArrayList<Muscle>();
 		this.numNodes = numNodes;
 		this.numMuscles = numMuscles;
-		
+
 		startPosX = new ArrayList<Integer>();
 		startPosY = new ArrayList<Integer>();
 
@@ -51,7 +51,7 @@ public class Creature {
 			}
 		}
 		center(x, y);
-		
+
 		for(Muscle temp: muscles){
 			temp.update(0);
 		}
@@ -62,24 +62,24 @@ public class Creature {
 			temp.update(dt);
 		}
 	}
-	
+
 	public void center(double x, double y){
 		double diffX = x - getAverageX();
 		double diffY = y - getAverageY();
-		
+
 		for(Node temp : nodes){
 			temp.setX(temp.getX() + diffX);
 			temp.setY(temp.getY() + diffY);
 		}
 	}
-	
+
 	public void reset(double x, double y){
 		for(int i = 0; i < nodes.size(); i++){
 			nodes.get(i).setX(startPosX.get(i));
 			nodes.get(i).setY(startPosY.get(i));
 		}
 		center(x, y);
-		
+
 		for(Muscle temp : muscles){
 			temp.reset();
 		}
@@ -105,7 +105,7 @@ public class Creature {
 	public int getNumMuscles(){
 		return numMuscles;
 	}
-	
+
 	public double getAverageX(){
 		double totalX = 0;
 		for(Node temp : nodes){
@@ -113,7 +113,7 @@ public class Creature {
 		}
 		return(totalX/numNodes);
 	}
-	
+
 	public double getAverageY(){
 		double totalY = 0;
 		for(Node temp : nodes){

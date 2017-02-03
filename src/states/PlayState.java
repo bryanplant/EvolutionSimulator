@@ -1,5 +1,4 @@
 package states;
-//
 import com.plant.Creature;
 import com.plant.Environment;
 import com.plant.UserInterface;
@@ -45,7 +44,7 @@ public class PlayState extends State {
 
         environment = new Environment(gameHeight);
         environment.show(root);
-        creature = new Creature(5, 2, gameWidth/2, gameHeight/2);
+        creature = new Creature(2, 1, gameWidth/2, gameHeight/2);
         creature.show(root);
 
         subScene = new SubScene(root, gameWidth, gameHeight);
