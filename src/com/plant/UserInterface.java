@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import states.PlayState;
 
+//Displays buttons for the user to control the simulation
 public class UserInterface {
 	private ArrayList<Button> buttons;
 	private Text label;

@@ -2,6 +2,7 @@ package states;
 
 import java.util.Stack;
 
+//Manages what state the simulation is in. e.g. Menu screen, simulation screen
 public class GameStateManager {
 	private Stack<State> states;
 

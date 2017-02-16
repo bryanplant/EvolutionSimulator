@@ -1,6 +1,6 @@
 package states;
 
-
+//Abstract class for different state types to built from
 public abstract class State {
     protected GameStateManager gsm;
 

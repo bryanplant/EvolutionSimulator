@@ -5,6 +5,8 @@ import java.util.Random;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
+
+//A muscle expands and contracts and moves the connected nodes
 public class Muscle {
 	private Line m;
 	private Node n1;
@@ -49,8 +51,8 @@ public class Muscle {
 		contractTime = rand.nextDouble() + .75;
 		expandTime = rand.nextDouble() + .75;
 		waitTime = rand.nextDouble() + .5;
-		maxed = false;
-		mined = false;
+		maxed = false;  //if the muscle is at its max length
+		mined = false;  //if the muscle is at its minimum length
 	}
 
 	public void update(double dt){
@@ -70,20 +72,21 @@ public class Muscle {
 		return m;
 	}
 
+	//updates the position of the connected nodes based on dt, speed, and friction
 	private void moveMuscle(double dt){
 		time += dt;
-		
+
 		double distanceX = n1.getX() - n2.getX();
 		double distanceY = n1.getY() - n2.getY();
 		double magnitude = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
 		double directionX = distanceX/magnitude;
 		double directionY = distanceY/magnitude;
-		
+
 		if(state == 0){
 			if(time > contractTime){
 				state = 2;
 				nextState = 1;
-				
+
 				lastMoveTime = contractTime-lastTime;
 				time = 0;
 			}
@@ -92,7 +95,7 @@ public class Muscle {
 			if(time > expandTime){
 				state = 2;
 				nextState = 0;
-				
+
 				lastMoveTime = expandTime-lastTime;
 				time = 0;
 			}
@@ -132,29 +135,25 @@ public class Muscle {
 		}
 		maxed = (magnitude > maxLength);
 		mined = (magnitude < minLength);
-		
+
 		if(maxed){
-			/*state = 0;
-			time = 0;*/
-			
+
 			n1.translateX(-directionX*(magnitude-maxLength)/2);
 			n1.translateY(-directionY*(magnitude-maxLength)/2);
 			n2.translateX(directionX*(magnitude-maxLength)/2);
 			n2.translateY(directionY*(magnitude-maxLength)/2);
 		}
 		else if(mined){
-//			state = 1;
-//			time = 0;
-			
 			n1.translateX(directionX*(minLength-magnitude)/2);
 			n1.translateY(directionY*(minLength-magnitude)/2);
 			n2.translateX(-directionX*(minLength-magnitude)/2);
 			n2.translateY(-directionY*(minLength-magnitude)/2);
 		}
-		
+
 		lastTime = time;
 	}
 
+	//redraws the muscle line
 	private void updateLine(){
 		m.setStartX(n1.getX());
 		m.setStartY(n1.getY());
@@ -162,6 +161,7 @@ public class Muscle {
 		m.setEndY(n2.getY());
 	}
 
+	//resets muscle to starting state
 	public void reset(){
 		time = 0;
 		state = 0;

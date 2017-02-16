@@ -31,7 +31,6 @@ public class PlayState extends State {
 	private int simSpeed = 1;
 	private double cameraSpeed = 20;
 
-	private double lastTime = 0;
 	private double totalTime = 0;
 
 	private boolean firstUpdate = true;
@@ -45,7 +44,7 @@ public class PlayState extends State {
 
         environment = new Environment(gameHeight);
         environment.show(root);
-        creature = new Creature(5, 2, gameWidth/2, gameHeight/2);
+        creature = new Creature(6, 3, gameWidth/2, gameHeight/2);
         creature.show(root);
 
         subScene = new SubScene(root, gameWidth, gameHeight);
@@ -86,20 +85,19 @@ public class PlayState extends State {
     		if(firstUpdate){
     			dt = totalTime - 1;
     		}
-	    	if(totalTime > 10){
+	    	/*if(totalTime > 10){
 	    		dt = 10 - lastTime;
 	    		System.out.println(lastTime);
-	    	}
+	    	}*/
 
 	    	creature.update(dt);
 	    	updateCamera(dt);
 
-	    	if(totalTime >= 10){
+	    	/*if(totalTime >= 10){
 	    		System.out.println(creature.getAverageX() + ", " + creature.getAverageY());
 	    		creature.reset(gameWidth/2, gameHeight/2);
 	    		totalTime = 0;
-	    	}
-	    	lastTime = totalTime;
+	    	}*/
 	    	firstUpdate = false;
     	}
 	}

@@ -6,13 +6,14 @@ import javafx.stage.Stage;
 import states.GameStateManager;
 import states.PlayState;
 
+//updates the GameStateManager with change in time
 public class Main extends Application{
 	private long lastTime = 0;
 
 	private GameStateManager gsm;
 
 	public static void main(String[] args){
-		
+
 		launch(args);
 	}
 

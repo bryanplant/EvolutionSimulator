@@ -8,6 +8,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
+//A node has friction and a list of nodes that it is connected to
 public class Node {
 	private Circle c;
 	private ArrayList<Integer> connections;
@@ -17,6 +18,7 @@ public class Node {
 
 	Random rand = new Random();
 
+	//creates a new node at (x, y)
 	public Node(double x, double y){
 		c = new Circle(x, y, 12.5);
 		c.setFill(Color.ALICEBLUE);
@@ -52,7 +54,7 @@ public class Node {
 	public void setY(double y){
 		c.setCenterY(y);
 	}
-	
+
 	public void setFriction(double friction){
 		this.friction = friction;
 	}
@@ -65,6 +67,7 @@ public class Node {
 		c.setCenterY(c.getCenterY() + y);
 	}
 
+	//Keeps track of what nodes this node is already connected to
 	public void addConnection(int x){
 		connections.add(x);
 		Collections.sort(connections);

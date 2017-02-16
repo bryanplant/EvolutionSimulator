@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+//Displays the background of the simulation
 public class Environment {
 	private ArrayList<Rectangle> rects;
 	private double width;
